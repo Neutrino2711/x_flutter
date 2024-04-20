@@ -1,5 +1,5 @@
 class BasicApiConstants {
-  static const String baseUrl = 'http://127.0.0.1:8000/';
+  static const String baseUrl = 'https://d885-49-37-46-97.ngrok-free.app/';
 }
 
 class PostConstants {
@@ -23,3 +23,13 @@ class PostConstants {
 
 
 }
+
+
+class UserApiConstants {
+  static const String baseurl = '${BasicApiConstants.baseUrl}user/';
+  static const String create = '${UserApiConstants.baseurl}create/';
+  static const String me = '${baseurl}me/';
+  static const String login = '${baseurl}token/';
+
+}
+
