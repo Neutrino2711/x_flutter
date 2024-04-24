@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:x/business_logic/blocs/bloc/post_list_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
+import 'package:x/data/models/post.dart';
 import 'package:x/data/models/posts_list.dart';
 
 class PostScreen extends StatelessWidget {
@@ -11,8 +12,11 @@ class PostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:(context) => PostListBloc(authToken: context.read<AuthState>().token!,dio: Dio(),savedPosts: false,myPosts: true),
+      create:(context) => PostListBloc(authToken: context.read<AuthCubit>().state.token!,dio: Dio(),savedPosts: false,myPosts: true),
       child:  Scaffold (
+        appBar: AppBar(title: Text('Posts'),actions: [IconButton(icon: Icon(Icons.logout), onPressed: (){
+          context.read<PostListBloc>().add(GetPostListEvent());
+        }),],),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -30,7 +34,7 @@ class PostScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return ListTile(
                               title: Text(posts[index].author.name),
-                              subtitle: Text(posts[index].content),
+                              subtitle: Text(posts[index].content!),
                             );
                           },);
                     }

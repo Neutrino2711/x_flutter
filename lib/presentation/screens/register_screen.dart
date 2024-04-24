@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
+import 'package:x/presentation/screens/login_screen.dart';
 import 'package:x/presentation/widgets/custom_button.dart';
 import 'package:x/presentation/widgets/custom_textfield.dart';
 import 'package:x/presentation/widgets/custom_passwordfield.dart';
@@ -149,6 +150,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             profilePic: _image
                           );
                         }
+                        Navigator.push(context,MaterialPageRoute(builder: (context){
+                          return LoginScreen();
+                        }));
                       },
                       child: state is AuthLoadingResgister? const CircularProgressIndicator():
                       Text('Create Account',
@@ -176,6 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ,
                       TextButton(onPressed: (){
                         context.read<AuthCubit>().navigateToLogin();
+                        // print(context.read<AuthCubit>().state);
                       }, child:  Text(
                           'Sign In',
                           style: TextStyle(

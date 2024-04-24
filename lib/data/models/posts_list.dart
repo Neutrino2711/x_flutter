@@ -5,14 +5,14 @@ import 'package:collection/collection.dart';
 class Postslist {
   final int id;
   final User author;
-  final int score;
+  final int? score;
   final int? vote;
   final String detail_url;
-  final String content;
+  final String? content;
   final String? image;
   final String created_at;
   final String updated_at;
-  final int depth;
+  final int? depth;
   final Postslist? parent;
   final List<dynamic> hastags;
   Postslist({
@@ -81,15 +81,15 @@ class Postslist {
     return Postslist(
       id: map['id'].toInt() as int,
       author: User.fromMap(map['author'] as Map<String,dynamic>),
-      score: map['score'].toInt() as int,
-      vote: map['vote'].toInt() as int,
+      score: map['score']?.toInt() as int?,
+      vote: map['vote']?.toInt() as int?,
       detail_url: map['detail_url'] as String,
-      content: map['content'] as String,
-      image: (map['image'] as String ),
+      content: map['content']?.toString() as String?,
+      image: (map['image']?.toString() as String? ),
       created_at: map['created_at'] as String,
       updated_at: map['updated_at'] as String,
-      depth: map['depth'].toInt() as int,
-      parent: Postslist.fromMap(map['parent'] as Map<String,dynamic>),
+      depth: map['depth']?.toInt() as int?,
+      parent: map['parent'] == null ? null : Postslist.fromMap(map['parent'] as Map<String,dynamic>),
       hastags: List<dynamic>.from((map['hastags'] as List<dynamic>),
     ));
   }

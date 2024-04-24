@@ -24,11 +24,12 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
     emit(PostListLoading());
     try{
       final response = await dio.get(
-        savedPosts? PostConstants.bookmarklistUrl:PostConstants.postlistUrl,
+        savedPosts? PostConstants.bookmarklistUrl:PostConstants.postCreateUrl,
         options: Options(
           headers: 
           {'Authorization': 'Token $authToken'},),
       );
+      print(response);
       List<Postslist> postsList = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
       emit(PostListLoaded(postsList));
 
@@ -36,6 +37,7 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
     }
     catch(e)
     {
+      print(e);
       emit(PostListError(e.toString()));
     }
 

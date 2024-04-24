@@ -4,9 +4,9 @@ class User {
   final int id;
   final String email;
   final String name;
-  final String city;
-  final String dob;
-  final String bio;
+  final String? city;
+  final String? dob;
+  final String? bio;
   final String joined;
   final int followers;
   final int following;
@@ -67,16 +67,16 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'].toInt() as int,
+      id: map['id']?.toInt() as int,
       email: map['email'] as String,
       name: map['name'] as String,
-      city: map['city'] as String,
-      dob: map['dob'] as String,
-      bio: map['bio'] as String,
+      city: map['city']?.toString() as String?,
+      dob: map['dob']?.toString() as String?,
+      bio: map['bio']?.toString() as String?,
       joined: map['joined'] as String,
       followers: map['followers'].toInt() as int,
       following: map['following'].toInt() as int,
-      profile_pic: (map['profile_pic'] as String),
+      profile_pic: (map['profile_pic']?.toString() as String?),
     );
   }
 

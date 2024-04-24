@@ -46,6 +46,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   void navigateToRegister() {
     emit(const UnAuthRegister());
+     print(state);
   }
 
   void navigateToLogin(){

@@ -1,5 +1,5 @@
 class BasicApiConstants {
-  static const String baseUrl = 'https://d885-49-37-46-97.ngrok-free.app/';
+  static const String baseUrl = 'https://7935-122-170-82-202.ngrok-free.app/';
 }
 
 class PostConstants {
