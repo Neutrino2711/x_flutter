@@ -1,27 +1,27 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 class User {
   final int id;
   final String email;
-  final String name;
+  final String? name;
   final String? city;
   final String? dob;
   final String? bio;
   final String joined;
-  final int followers;
-  final int following;
+  final List<int>? followers;
   final String? profile_pic;
   User({
     required this.id,
     required this.email,
-    required this.name,
-    required this.city,
-    required this.dob,
-    required this.bio,
+    this.name,
+    this.city,
+    this.dob,
+    this.bio,
     required this.joined,
-    required this.followers,
-    required this.following,
-   this.profile_pic,
+    this.followers,
+    this.profile_pic,
   });
 
   User copyWith({
@@ -32,8 +32,7 @@ class User {
     String? dob,
     String? bio,
     String? joined,
-    int? followers,
-    int? following,
+    List<int>? followers,
     String? profile_pic,
   }) {
     return User(
@@ -45,13 +44,12 @@ class User {
       bio: bio ?? this.bio,
       joined: joined ?? this.joined,
       followers: followers ?? this.followers,
-      following: following ?? this.following,
       profile_pic: profile_pic ?? this.profile_pic,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'email': email,
       'name': name,
@@ -60,23 +58,21 @@ class User {
       'bio': bio,
       'joined': joined,
       'followers': followers,
-      'following': following,
       'profile_pic': profile_pic,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id']?.toInt() as int,
+      id: map['id'] as int,
       email: map['email'] as String,
-      name: map['name'] as String,
-      city: map['city']?.toString() as String?,
-      dob: map['dob']?.toString() as String?,
-      bio: map['bio']?.toString() as String?,
+      name: map['name'] as String?,
+      city: map['city'] as String?,
+      dob: map['dob'] as String?,
+      bio: map['bio'] as String?,
       joined: map['joined'] as String,
-      followers: map['followers'].toInt() as int,
-      following: map['following'].toInt() as int,
-      profile_pic: (map['profile_pic']?.toString() as String?),
+      followers: (map['followers'] as List<dynamic>?)?.map((item) => item as int).toList(),
+      profile_pic: map['profile_pic'] as String?,
     );
   }
 
@@ -86,14 +82,14 @@ class User {
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, email: $email, name: $name, city: $city, dob: $dob, bio: $bio, joined: $joined, followers: $followers, following: $following, profile_pic: $profile_pic)';
+    return 'User(id: $id, email: $email, name: $name, city: $city, dob: $dob, bio: $bio, joined: $joined, followers: $followers, profile_pic: $profile_pic)';
   }
 
   @override
-  bool operator ==(covariant User other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
   
-    return 
+    return other is User &&
       other.id == id &&
       other.email == email &&
       other.name == name &&
@@ -101,8 +97,7 @@ class User {
       other.dob == dob &&
       other.bio == bio &&
       other.joined == joined &&
-      other.followers == followers &&
-      other.following == following &&
+      listEquals(other.followers, followers) &&
       other.profile_pic == profile_pic;
   }
 
@@ -110,13 +105,12 @@ class User {
   int get hashCode {
     return id.hashCode ^
       email.hashCode ^
-      name.hashCode ^
-      city.hashCode ^
-      dob.hashCode ^
-      bio.hashCode ^
+      (name?.hashCode ?? 0) ^
+      (city?.hashCode ?? 0) ^
+      (dob?.hashCode ?? 0) ^
+      (bio?.hashCode ?? 0) ^
       joined.hashCode ^
-      followers.hashCode ^
-      following.hashCode ^
-      profile_pic.hashCode;
+      (followers?.hashCode ?? 0) ^
+      (profile_pic?.hashCode ?? 0);
   }
 }

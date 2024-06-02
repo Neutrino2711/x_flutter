@@ -21,7 +21,8 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
   final bool myPosts ;
 
   Future<void> _onGetPostListEvent(GetPostListEvent event, Emitter<PostListState> emit) async {
-    emit(PostListLoading());
+    emit(
+      PostListLoading());
     try{
       final response = await dio.get(
         savedPosts? PostConstants.bookmarklistUrl:PostConstants.postCreateUrl,
@@ -29,8 +30,9 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
           headers: 
           {'Authorization': 'Token $authToken'},),
       );
-      print(response);
+      // print(response);
       List<Postslist> postsList = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
+      print(postsList.last);
       emit(PostListLoaded(postsList));
 
 
