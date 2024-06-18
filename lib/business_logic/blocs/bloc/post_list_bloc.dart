@@ -19,13 +19,15 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
   String authToken;
   final bool savedPosts ;
   final bool myPosts ;
+  
+
 
   Future<void> _onGetPostListEvent(GetPostListEvent event, Emitter<PostListState> emit) async {
     emit(
       PostListLoading());
     try{
       final response = await dio.get(
-        savedPosts? PostConstants.bookmarklistUrl:PostConstants.postCreateUrl,
+         savedPosts? PostConstants.bookmarklistUrl:PostConstants.postCreateUrl,
         options: Options(
           headers: 
           {'Authorization': 'Token $authToken'},),

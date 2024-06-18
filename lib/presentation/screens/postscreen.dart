@@ -1,14 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:x/business_logic/bloc/comment_bloc.dart';
 import 'package:x/business_logic/bloc/create_post_bloc.dart';
+import 'package:x/business_logic/bloc/single_community_post_bloc.dart';
 import 'package:x/business_logic/blocs/bloc/post_list_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
 import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
 import 'package:x/data/models/post.dart';
 import 'package:x/data/models/posts_list.dart';
 import 'package:x/presentation/screens/create_post_screen.dart';
+import 'package:x/presentation/screens/single_post_screen.dart';
 import 'package:x/presentation/widgets/card_post.dart';
+import 'package:x/presentation/widgets/post_list_widget.dart';
 
 class PostScreen extends StatelessWidget {
   const PostScreen({super.key});
@@ -44,7 +48,7 @@ class PostScreen extends StatelessWidget {
         title: Text('Posts'),
         actions: [
           IconButton(
-              icon: Icon(Icons.logout),
+              icon: Icon(Icons.refresh),
               onPressed: () {
                 context.read<PostListBloc>().add(GetPostListEvent());
               
@@ -57,22 +61,7 @@ class PostScreen extends StatelessWidget {
         if (state is PostListLoaded) {
           List<Postslist> posts = state.postsList;
           print(posts.length);
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: posts.length,
-            itemBuilder: (context, index) {
-              return PostCard(
-                posts: posts,
-                index: index,
-              );
-    
-              // return ListTile(
-              //   title: Text(posts[index].author.name!),
-              //   subtitle: Text(posts[index].content!),
-              // //  leading: posts[index].image != null ? Image.network(posts[index].image!): Container(),
-              // );
-            },
-          );
+          return PostsListWidget(posts: posts);
         } else if (state is PostListError) {
           return Text(state.message);
         } else {
@@ -82,3 +71,4 @@ class PostScreen extends StatelessWidget {
     );
   }
 }
+

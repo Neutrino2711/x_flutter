@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
 import 'package:x/data/repos/auth_repo.dart';
 import 'package:x/presentation/screens/register_screen.dart';
+import 'package:x/presentation/screens/single_post_screen.dart';
 import 'package:x/presentation/screens/wrapper.dart';
 
 Future<void> main() async {

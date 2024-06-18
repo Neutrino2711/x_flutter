@@ -1,5 +1,5 @@
 class BasicApiConstants {
-  static const String baseUrl = 'https://0de9-47-9-121-4.ngrok-free.app/';
+  static const String baseUrl = 'https://82a0-112-79-192-57.ngrok-free.app/';
 }
 
 class PostConstants {
@@ -19,7 +19,10 @@ class PostConstants {
   }
   static const String trendingUrl = '${BasicApiConstants.baseUrl}post/trending/';
 
-  
+  static String commentUrl(int id)
+  {
+    return '${BasicApiConstants.baseUrl}post/$id/comments';
+  }
 
 
 }

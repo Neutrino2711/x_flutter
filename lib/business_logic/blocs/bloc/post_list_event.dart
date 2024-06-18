@@ -9,3 +9,4 @@ sealed class PostListEvent extends Equatable{
 }
 
 final class GetPostListEvent extends PostListEvent{}
+

@@ -1,13 +1,16 @@
 import 'dart:convert';
-import "../models/user.dart";
-import 'package:collection/collection.dart';
 
-class Postslist {
+import 'package:flutter/foundation.dart';
+import 'package:x/data/models/user.dart';
+
+class SinglePost {
   final int id;
   final User author;
+  final int upvotes;
+  final int downvotes;
   final int? score;
+  final bool is_bookmarked;
   final int? vote;
-  final String detail_url;
   final String? content;
   final String? image;
   final String created_at;
@@ -15,27 +18,31 @@ class Postslist {
   final int? depth;
   final int? parent;
   final List<dynamic> hastags;
-  Postslist({
+  SinglePost({
     required this.id,
     required this.author,
+    required this.upvotes,
+    required this.downvotes,
     required this.score,
-   this.vote,
-    required this.detail_url,
+    required this.is_bookmarked,
+    required this.vote,
     required this.content,
-     this.image,
+    required this.image,
     required this.created_at,
     required this.updated_at,
     required this.depth,
-     this.parent,
+    required this.parent,
     required this.hastags,
   });
 
-  Postslist copyWith({
+  SinglePost copyWith({
     int? id,
     User? author,
+    int? upvotes,
+    int? downvotes,
     int? score,
+    bool? is_bookmarked,
     int? vote,
-    String? detail_url,
     String? content,
     String? image,
     String? created_at,
@@ -44,12 +51,14 @@ class Postslist {
     int? parent,
     List<dynamic>? hastags,
   }) {
-    return Postslist(
+    return SinglePost(
       id: id ?? this.id,
       author: author ?? this.author,
+      upvotes: upvotes ?? this.upvotes,
+      downvotes: downvotes ?? this.downvotes,
       score: score ?? this.score,
+      is_bookmarked: is_bookmarked ?? this.is_bookmarked,
       vote: vote ?? this.vote,
-      detail_url: detail_url ?? this.detail_url,
       content: content ?? this.content,
       image: image ?? this.image,
       created_at: created_at ?? this.created_at,
@@ -64,31 +73,35 @@ class Postslist {
     return <String, dynamic>{
       'id': id,
       'author': author.toMap(),
+      'upvotes': upvotes,
+      'downvotes': downvotes,
       'score': score,
+      'is_bookmarked': is_bookmarked,
       'vote': vote,
-      'detail_url': detail_url,
       'content': content,
       'image': image,
       'created_at': created_at,
       'updated_at': updated_at,
       'depth': depth,
-      'parent': parent,
+      'parent': parent!,
       'hastags': hastags,
     };
   }
 
-  factory Postslist.fromMap(Map<String, dynamic> map) {
-    return Postslist(
+  factory SinglePost.fromMap(Map<String, dynamic> map) {
+    return SinglePost(
       id: map['id'].toInt() as int,
       author: User.fromMap(map['author'] as Map<String,dynamic>),
-      score: map['score']?.toInt() as int?,
-      vote: map['vote']?.toInt() as int?,
-      detail_url: map['detail_url'] as String,
-      content: map['content']?.toString() as String?,
-      image: (map['image']?.toString() as String? ),
+      upvotes: map['upvotes'].toInt() as int,
+      downvotes: map['downvotes'].toInt() as int,
+      score: map['score'].toInt() as int,
+      is_bookmarked: map['is_bookmarked'] as bool,
+      vote: (map['vote']?.toInt()),
+      content: map['content'] as String,
+      image: (map['image']?.toString()),
       created_at: map['created_at'] as String,
       updated_at: map['updated_at'] as String,
-      depth: map['depth']?.toInt() as int?,
+      depth: map['depth'].toInt() as int,
       parent: map['parent']?.toInt() as int?,
       hastags: List<dynamic>.from((map['hastags'] as List<dynamic>),
     ));
@@ -96,24 +109,25 @@ class Postslist {
 
   String toJson() => json.encode(toMap());
 
-  factory Postslist.fromJson(String source) => Postslist.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory SinglePost.fromJson(String source) => SinglePost.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Postslist(id: $id, author: $author, score: $score, vote: $vote, detail_url: $detail_url, content: $content, image: $image, created_at: $created_at, updated_at: $updated_at, depth: $depth, parent: $parent, hastags: $hastags)';
+    return 'SinglePost(id: $id, author: $author, upvotes: $upvotes, downvotes: $downvotes, score: $score, is_bookmarked: $is_bookmarked, vote: $vote, content: $content, image: $image, created_at: $created_at, updated_at: $updated_at, depth: $depth, parent: $parent, hastags: $hastags)';
   }
 
   @override
-  bool operator ==(covariant Postslist other) {
+  bool operator ==(covariant SinglePost other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
   
     return 
       other.id == id &&
       other.author == author &&
+      other.upvotes == upvotes &&
+      other.downvotes == downvotes &&
       other.score == score &&
+      other.is_bookmarked == is_bookmarked &&
       other.vote == vote &&
-      other.detail_url == detail_url &&
       other.content == content &&
       other.image == image &&
       other.created_at == created_at &&
@@ -127,9 +141,11 @@ class Postslist {
   int get hashCode {
     return id.hashCode ^
       author.hashCode ^
+      upvotes.hashCode ^
+      downvotes.hashCode ^
       score.hashCode ^
+      is_bookmarked.hashCode ^
       vote.hashCode ^
-      detail_url.hashCode ^
       content.hashCode ^
       image.hashCode ^
       created_at.hashCode ^
@@ -139,9 +155,3 @@ class Postslist {
       hastags.hashCode;
   }
 }
-
-
-
-
-
-
