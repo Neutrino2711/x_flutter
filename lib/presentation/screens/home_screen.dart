@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x/data/models/trending.dart';
 import 'package:x/presentation/screens/postscreen.dart';
 
 
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         children: [
           PostScreen(),
+          // TrendingTab(),
           
         ]
       )

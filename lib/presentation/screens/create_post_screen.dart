@@ -10,6 +10,9 @@ import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
 import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
 
 class CreatePostScreen extends StatefulWidget {
+
+  CreatePostScreen({Key? key, this.parentId}) : super(key: key);
+  final int? parentId;
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
 }
@@ -47,8 +50,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             child: Text('Post'),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                context.read<CreatePostBloc>().add(CreatePostEvent(
-                    content: contentController.text, image: _image?.path));
+               widget.parentId==null? context.read<CreatePostBloc>().add(CreatePostOnlyEvent(
+                    content: contentController.text, image: _image?.path)):
+                    context.read<CreatePostBloc>().add(CreateCommentEvent(
+                      content: contentController.text, image: _image?.path, postId: widget.parentId!));
+                    
                     // context.read<PostListBloc>().add(GetPostListEvent());
                      Navigator.pop(context);
               }

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:x/business_logic/bloc/comment_bloc.dart';
+import 'package:x/business_logic/bloc/create_post_bloc.dart';
 import 'package:x/business_logic/bloc/single_community_post_bloc.dart';
 import 'package:x/business_logic/blocs/bloc/post_list_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
 import 'package:x/data/models/post.dart';
 import 'package:x/data/models/posts_list.dart';
 import 'package:x/data/models/single_post.dart';
+import 'package:x/presentation/screens/create_post_screen.dart';
 import 'package:x/presentation/screens/postscreen.dart';
 import 'package:x/presentation/widgets/card_post.dart';
 import 'package:intl/intl.dart';
@@ -33,44 +35,52 @@ class SinglePostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 0.5)
+        ),
+        height: 50.0,width: double.infinity,
+      child: Center(child: TextButton(child: Text('Post Comment',
+      style: TextStyle(
+        color: Colors.grey,
+        fontSize: 20.0,),
+      ),
+      onPressed: (){
+         Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+        create: (context) => UserBloc(
+            authToken: context.read<AuthCubit>().state.token!, dio: Dio())..add(GetInitialUserData()),
+      ),
+      BlocProvider(
+        create: (context) => CreatePostBloc(
+            authToken: context.read<AuthCubit>().state.token!, dio: Dio()),
+      ),
+     
+    
+                        ],
+                        child: CreatePostScreen(parentId: postId,),
+                      )));
+      },
+      )),
+      ),
                   appBar: AppBar(
+                  
     title: Text('Post'),
     actions: [],
+   
                   ),
                   body: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        BlocBuilder<UserBloc, UserState>(
-                                        builder: (context, state) {
-                                          if (state is LoadedUserState) {
-                                            return state.user!.profile_pic != null
-                          ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(state.user!.profile_pic!),
-                              ),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
-                              Text(state.user!.name!,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 18.0,),
-                              ),
-                            ],
-                          )
-                          : CircleAvatar(
-                            child: Icon(Icons.person),
-                          );
-                                          } else if (state is ErrorUserState) {
-                                            return Text(state.error!);
-                                          } else {
-                                            print(state);
-                                            return CircularProgressIndicator();
-                                          }
-                                        },
-                                      ),
+                       
+                                   
+                                        
+                                      
                                       SizedBox(
                                         height: MediaQuery.of(context).size.height * 0.02,
                                       ),
@@ -97,12 +107,12 @@ class SinglePostScreen extends StatelessWidget {
                               builder: (context, state) {
                             if (state is CommentLoaded) {
                               List<Postslist> posts = state.comments;
-                              print(posts.length);
+                              // print(posts.lesngth)s;
                               return Expanded(
                                 child: PostsListWidget(posts: posts),
                               );
                             } else if (state is CommentError) {
-                              return Text(state.message);
+                              return Text("No Comments Found");
                             } else {
                               return CircularProgressIndicator();
                             }
@@ -127,10 +137,45 @@ class PostDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(post.author.name);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+                               post.author.profile_pic != null
+                          ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(post.author.profile_pic!),
+                              ),
+                              SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
+                              Text(post.author.name!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18.0,),
+                              ),
+                            ],
+                          )
+                          : Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                               child: Icon(Icons.person)
+                              ),
+                              SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
+                              Text(post.author.name!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18.0,),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02,),
+
+                               
               Text(post.content!,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -182,14 +227,39 @@ class PostDetailWidget extends StatelessWidget {
                             Row(
                               children: [
                                 IconButton(
-        icon: const Icon(Icons.arrow_upward), onPressed: () {}),
+        icon:  Icon(Icons.thumb_up_sharp
+        ,
+        color: post.vote != null && post.vote == 1?Colors.blue:Colors.grey,
+        ), onPressed: () {
+          if(post.vote == null)
+          {
+            context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
+          }
+          else if(post.vote == 1)
+          {
+            context.read<SingleCommunityPostBloc>().add(RemoveLikeDislikeSingleCommunityPostEvent(vote: 1));
+          }
+          else if(post.vote == -1)
+          {
+            context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
+          }
+
+          // context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
+        }),
+                              
                                 IconButton(
-        icon: const Icon(Icons.comment), onPressed: () {}),
-        //                         IconButton(
-        // icon: const Icon(Icons.share), onPressed: () {}),
+        icon:  Icon(Icons.bookmark_add_outlined,
+        color: post.is_bookmarked?Colors.blue:Colors.grey,
+        ), onPressed: () {
+          context.read<SingleCommunityPostBloc>().add(BookMarkSingleCommunityPostEvent());
+        }),
                               ],
                             ),
+                            Divider(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
                               ],
+                              
       ),
     );
   }

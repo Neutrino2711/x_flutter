@@ -28,55 +28,54 @@ class PostsListWidget extends StatelessWidget {
       itemCount: posts.length,
       itemBuilder: (context, index) {
         return PostCard(
-          onTap: (){
+          onTap: () {
             Navigator.push(
-              context, 
-            MaterialPageRoute(
-            builder: (context) => MultiBlocProvider(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MultiBlocProvider(
                   providers: [
-                  BlocProvider<SingleCommunityPostBloc>(
-    create: (context) => SingleCommunityPostBloc(
-      postId: posts[index].id, 
-      dio: Dio(), 
-      authToken: context.read<AuthCubit>().state.authToken!
-      )..add(GetSingleCommunityPostEvent()), 
-        
-            ),
-          
-        
-     
-    
-      
-      BlocProvider(
-          create: (context) => UserBloc(
-              authToken: context.read<AuthCubit>().state.authToken!,
-              dio: Dio())
-            ..add(GetInitialUserData()),
-      ),
-      BlocProvider(
-        create: (context) => PostListBloc(
-            authToken: context.read<AuthCubit>().state.authToken!,
-            dio: Dio())
-          ..add(GetPostListEvent()),
-      ),
-      BlocProvider(create: (context)=> CommentBloc(
-        authToken: context.read<AuthCubit>().state.token!,
-         dio: Dio())..add(GetCommentListEvent(posts[index].id),),),
-         
-        
+                    BlocProvider<SingleCommunityPostBloc>(
+                      create: (context) => SingleCommunityPostBloc(
+                          postId: posts[index].id,
+                          dio: Dio(),
+                          authToken:
+                              context.read<AuthCubit>().state.authToken!)
+                        ..add(GetSingleCommunityPostEvent()),
+                    ),
+                    BlocProvider(
+                      create: (context) => UserBloc(
+                          authToken:
+                              context.read<AuthCubit>().state.authToken!,
+                          dio: Dio())
+                        ..add(GetInitialUserData()),
+                    ),
+                    BlocProvider(
+                      create: (context) => PostListBloc(
+                          authToken:
+                              context.read<AuthCubit>().state.authToken!,
+                          dio: Dio())
+                        ..add(GetPostListEvent()),
+                    ),
+                    BlocProvider(
+                      create: (context) => CommentBloc(
+                          authToken: context.read<AuthCubit>().state.token!,
+                          dio: Dio())
+                        ..add(
+                          GetCommentListEvent(posts[index].id),
+                        ),
+                    ),
                   ],
-                  child: SinglePostScreen(postId: posts[index].id,),
-                ),),);
-            
-          
+                  child: SinglePostScreen(
+                    postId: posts[index].id,
+                  ),
+                ),
+              ),
+            );
           },
           posts: posts,
           index: index,
         );
-        
-      
       },
     );
-    
   }
 }

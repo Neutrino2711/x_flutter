@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:x/business_logic/bloc/single_community_post_bloc.dart';
 import 'package:x/business_logic/blocs/bloc/post_list_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
 import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
@@ -30,6 +31,8 @@ class Wrapper extends StatelessWidget {
 
         PostListBloc postListBloc = PostListBloc(authToken: snapshot.data!.authToken!, dio: Dio());
 
+        // SingleCommunityPostBloc singleCommunityPostBloc = SingleCommunityPostBloc(authToken: snapshot.data!.authToken!, dio: Dio());
+
 
         
         
@@ -38,6 +41,7 @@ class Wrapper extends StatelessWidget {
           providers: [
             BlocProvider.value(value: userbloc,),
             BlocProvider.value(value: postListBloc),
+            // BlocProvider(create: ())
             
           ], 
           
