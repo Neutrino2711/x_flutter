@@ -14,7 +14,8 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
     on<GetPostListEvent>(_onGetPostListEvent);
     on<GetFollowingPostListEvent>(_onGetFollowingPostListEvent);
     on<GetUserPostsEvent>(_onGetUserPostsEvent);
-    add(GetPostListEvent());
+    on<GetSavedPostsEvent>(_onGetSavedPostsEvent);
+    // add(GetPostListEvent());
   }
 
   Dio dio;
@@ -37,7 +38,7 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
       );
       // print(response);
       List<Postslist> postsList = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
-      print(postsList.last);
+      // print(postsList.last);
       emit(PostListLoaded(postsList));
 
 
@@ -61,7 +62,7 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
       );
       // print(response);
       List<Postslist> postsList = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
-      print(postsList.last);
+      // print(postsList.last);
       emit(PostListLoaded(postsList));
 
 
@@ -87,8 +88,34 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
       );
       // print(response);
       List<Postslist> postsList1 = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
-      print(postsList1.last);
+      // print(postsList1.last);
       emit(PostListLoaded(postsList1));
+
+
+    }
+    catch(e)
+    {
+      print(e);
+      emit(PostListError(e.toString()));
+    }
+  }
+
+  Future<void> _onGetSavedPostsEvent(GetSavedPostsEvent event,Emitter<PostListState> emit)async
+  {
+    emit(
+      PostListLoading());
+    try{
+      final response = await dio.get(
+          PostConstants.bookmarklistUrl,
+        options: Options(
+          headers: 
+          {'Authorization': 'Token $authToken'},),
+      );
+      // print(response);
+      print("her");
+      List<Postslist> bookmarkList = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
+      // print(bookmarkList);
+      emit(PostListLoaded(bookmarkList));
 
 
     }

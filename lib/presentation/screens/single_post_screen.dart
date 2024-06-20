@@ -97,7 +97,7 @@ class SinglePostScreen extends StatelessWidget {
                         } else if (state is SingleCommunityPostError) {
                           return Text(state.message);
                         } else {
-                          return CircularProgressIndicator();
+                          return Center(child: CircularProgressIndicator());
                         }
                       }
                       ) ,
@@ -111,7 +111,7 @@ class SinglePostScreen extends StatelessWidget {
                           } else if (state is CommentError) {
                             return Text("No Comments Found");
                           } else {
-                            return CircularProgressIndicator();
+                            return Center(child: CircularProgressIndicator());
                           }
                         }),
                                       
@@ -148,7 +148,7 @@ class PostDetailWidget extends StatelessWidget {
                             SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
                             Text(post.author.name!,
                             style: TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.bold,
                               fontSize: 18.0,),
                             ),
                           ],
@@ -162,7 +162,7 @@ class PostDetailWidget extends StatelessWidget {
                             SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
                             Text(post.author.name!,
                             style: TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.bold,
                               fontSize: 18.0,),
                             ),
                           ],
@@ -173,7 +173,7 @@ class PostDetailWidget extends StatelessWidget {
                              
             Text(post.content!,
             style: TextStyle(
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.w400,
               fontSize: 18.0,
               ),
             ),
@@ -200,7 +200,7 @@ class PostDetailWidget extends StatelessWidget {
                               
                               Padding(
     padding: const EdgeInsets.only(right: 8.0),
-    child: Text(dateTime[0]),
+    child: Text('Created: ' + dateTime[0]),
                               ),
                               // Text("."),
                               Padding(

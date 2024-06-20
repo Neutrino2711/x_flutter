@@ -30,7 +30,7 @@ class Wrapper extends StatelessWidget {
 
         userbloc.add(GetInitialUserData());
 
-        PostListBloc postListBloc = PostListBloc(authToken: snapshot.data!.authToken!, dio: Dio());
+        PostListBloc postListBloc = PostListBloc(authToken: snapshot.data!.authToken!, dio: Dio())..add(GetPostListEvent());
 
         TrendingBloc trendingListBloc = TrendingBloc(authToken: snapshot.data!.authToken!, dio: Dio());
 

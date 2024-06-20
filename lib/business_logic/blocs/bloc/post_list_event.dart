@@ -13,3 +13,5 @@ final class GetPostListEvent extends PostListEvent{}
 final class GetFollowingPostListEvent extends PostListEvent{}
 
 final class GetUserPostsEvent extends PostListEvent{}
+
+final class GetSavedPostsEvent extends PostListEvent{}

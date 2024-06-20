@@ -52,8 +52,19 @@ class Profile extends StatelessWidget {
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       Text(
+                        "Joined ${userState.user!.joined}",
+                        style: TextStyle(fontSize: 16,
+                        // fontStyle: FontStyle.italic,
+                        color: Colors.grey[600]
+                        ),
+                      
+                      ),
+                      // SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Text(
                         "${userState.user!.followers!.length} Followers",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16,
+                        color: Colors.grey[600],
+                        ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       Text(
