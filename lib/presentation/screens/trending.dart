@@ -8,7 +8,27 @@ class TrendingPage extends StatelessWidget {
     context.read<TrendingBloc>().add(FetchTrending());
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trending Hashtags'),
+        title: TextButton(onPressed:  (){},
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(Colors.grey[200]),
+          fixedSize: WidgetStateProperty.all(Size(MediaQuery.of(context).size.height*0.35, MediaQuery.of(context).size.height*0.05)),
+          // padding: WidgetStateProperty.all(EdgeInsets.all(10)),
+        ),
+          child: Text("Search X",
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20,
+          ),
+          ),),
+        centerTitle: true,
+        
+        // actions: [
+        //   TextButton(
+
+        //     onPressed: (){},
+        //     child: Text("Search X")
+        //   ),
+        // ],
       ),
       body: BlocBuilder<TrendingBloc, TrendingState>(
         builder: (context, state) {
@@ -20,10 +40,18 @@ class TrendingPage extends StatelessWidget {
             return ListView.builder(
               itemCount: state.trendingHashtags.length,
               itemBuilder: (context, index) {
-                print(state.trendingHashtags[index].name);
-                return ListTile(
-                  title: Text('#${state.trendingHashtags[index].name}'),
-                  // subtitle: Text(state.trendingHashtags[index].),
+                // print(state.trendingHashtags[index].name);s
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Text('Trending'),
+                    ListTile(
+                      // leading: Text('Trending'),
+                      title: Text('#${state.trendingHashtags[index].name}'),
+                      trailing: Text('${state.trendingHashtags[index].count} posts'),
+                      // subtitle: Text(state.trendingHashtags[index].),
+                    ),
+                  ],
                 );
               },
             );

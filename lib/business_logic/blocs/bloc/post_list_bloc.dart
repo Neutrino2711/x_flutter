@@ -13,6 +13,7 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
    
     on<GetPostListEvent>(_onGetPostListEvent);
     on<GetFollowingPostListEvent>(_onGetFollowingPostListEvent);
+    on<GetUserPostsEvent>(_onGetUserPostsEvent);
     add(GetPostListEvent());
   }
 
@@ -73,6 +74,30 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
 
   }
 
+  Future<void> _onGetUserPostsEvent(GetUserPostsEvent event,Emitter<PostListState> emit)async
+  {
+    emit(
+      PostListLoading());
+    try{
+      final response = await dio.get(
+          PostConstants.postlistUrl,
+        options: Options(
+          headers: 
+          {'Authorization': 'Token $authToken'},),
+      );
+      // print(response);
+      List<Postslist> postsList1 = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
+      print(postsList1.last);
+      emit(PostListLoaded(postsList1));
+
+
+    }
+    catch(e)
+    {
+      print(e);
+      emit(PostListError(e.toString()));
+    }
+  }
 
 
 }

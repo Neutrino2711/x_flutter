@@ -44,6 +44,7 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String content = posts[index].content!;
     return GestureDetector(
      onTap: onTap,
      child: Padding(
@@ -67,9 +68,10 @@ class PostTile extends StatelessWidget {
                      height: MediaQuery.of(context).size.height * 0.02,
                    ),
                    // Text(posts[index].author.name!),
+                   
                    posts[index].content != null
                        ? Text(
-                           posts[index].content!,
+                     content.length>100?content.substring(0,100):content,
                            style: TextStyle(
                              fontSize: 18.0,
                            ),
@@ -151,6 +153,10 @@ class PostHeadBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(posts[index].author.name==null)
+    {
+      print(posts[index]);
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -167,6 +173,7 @@ class PostHeadBar extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.05,
         ),
         Text(
+          
           posts[index].author.name!,
           style: TextStyle(
             fontWeight: FontWeight.w700,

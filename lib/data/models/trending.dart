@@ -3,18 +3,22 @@ import 'dart:convert';
 class Trending {
   final int id;
   final String name;
+  final int count;
   Trending({
     required this.id,
     required this.name,
+    required this.count,
   });
 
   Trending copyWith({
     int? id,
     String? name,
+    int? count,
   }) {
     return Trending(
       id: id ?? this.id,
       name: name ?? this.name,
+      count: count ?? this.count,
     );
   }
 
@@ -22,6 +26,7 @@ class Trending {
     return <String, dynamic>{
       'id': id,
       'name': name,
+      'count': count,
     };
   }
 
@@ -29,6 +34,7 @@ class Trending {
     return Trending(
       id: map['id'].toInt() as int,
       name: map['name'] as String,
+      count: map['count'].toInt() as int,
     );
   }
 
@@ -37,7 +43,7 @@ class Trending {
   factory Trending.fromJson(String source) => Trending.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'Trending(id: $id, name: $name)';
+  String toString() => 'Trending(id: $id, name: $name, count: $count)';
 
   @override
   bool operator ==(covariant Trending other) {
@@ -45,9 +51,10 @@ class Trending {
   
     return 
       other.id == id &&
-      other.name == name;
+      other.name == name &&
+      other.count == count;
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ count.hashCode;
 }

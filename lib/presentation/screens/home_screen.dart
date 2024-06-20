@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.trending_up),
-            label: 'Trending',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
         ],
       ),

@@ -73,55 +73,51 @@ class SinglePostScreen extends StatelessWidget {
     actions: [],
    
                   ),
-                  body: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                       
-                                   
-                                        
+                  body: ListView(
+                    padding: EdgeInsets.all(8.0),
+                    children: [
+                     
+                                 
                                       
-                                      SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.02,
-                                      ),
-                      BlocBuilder<SingleCommunityPostBloc, SingleCommunityPostState>(
-                            builder: (context, state) {
-                          if (state is SingleCommunityPostLoaded) {
-                            SinglePost post = state.post;
-                            List<String> dateTime = TimeSplit(post.created_at);
-                            return PostDetailWidget(post: post, dateTime: dateTime);
-                            
-                                
-                      
-                             
+                                    
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.02,
+                                    ),
+                    BlocBuilder<SingleCommunityPostBloc, SingleCommunityPostState>(
+                          builder: (context, state) {
+                        if (state is SingleCommunityPostLoaded) {
+                          SinglePost post = state.post;
+                          List<String> dateTime = TimeSplit(post.created_at);
+                          return PostDetailWidget(post: post, dateTime: dateTime);
+                          
                               
-                          } else if (state is SingleCommunityPostError) {
-                            return Text(state.message);
+                    
+                           
+                            
+                        } else if (state is SingleCommunityPostError) {
+                          return Text(state.message);
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      }
+                      ) ,
+                        //Comment Section
+                        BlocBuilder<CommentBloc, CommentState>(
+                            builder: (context, state) {
+                          if (state is CommentLoaded) {
+                            List<Postslist> posts = state.comments;
+                            // print(posts.lesngth)s;
+                            return PostsListWidget(posts: posts);
+                          } else if (state is CommentError) {
+                            return Text("No Comments Found");
                           } else {
                             return CircularProgressIndicator();
                           }
-                        }
-                        ) ,
-                          //Comment Section
-                          BlocBuilder<CommentBloc, CommentState>(
-                              builder: (context, state) {
-                            if (state is CommentLoaded) {
-                              List<Postslist> posts = state.comments;
-                              // print(posts.lesngth)s;
-                              return Expanded(
-                                child: PostsListWidget(posts: posts),
-                              );
-                            } else if (state is CommentError) {
-                              return Text("No Comments Found");
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          }),
-                                        
-                                               
-                      ],
-                      ),
-                  ),);
+                        }),
+                                      
+                                             
+                    ],
+                    ),);
   }
 }
 
@@ -138,129 +134,127 @@ class PostDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(post.author.name);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-                               post.author.profile_pic != null
-                          ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+                             post.author.profile_pic != null
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(post.author.profile_pic!),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
+                            Text(post.author.name!,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 18.0,),
+                            ),
+                          ],
+                        )
+                        : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                             child: Icon(Icons.person)
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
+                            Text(post.author.name!,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 18.0,),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,),
+    
+                             
+            Text(post.content!,
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 18.0,
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,),
+             post.image != null ?  Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: ClipRRect(
+                             borderRadius: BorderRadius.circular(16.0),
+                             child: Image.network(
+                post.image!,
+                fit: BoxFit.fill,
+                width: double.infinity,
+                             ),
+                           ),
+             )
+                          : Container(
+                          ),
+              //             SizedBox(
+              // height: MediaQuery.of(context).size.height * 0.02,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start  ,
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(post.author.profile_pic!),
+                              
+                              Padding(
+    padding: const EdgeInsets.only(right: 8.0),
+    child: Text(dateTime[0]),
                               ),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
-                              Text(post.author.name!,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 18.0,),
+                              // Text("."),
+                              Padding(
+    padding: const EdgeInsets.only(right: 8.0),
+    child: Text(dateTime[1]),
                               ),
                             ],
-                          )
-                          : Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+            
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+                          Row(children: [
+                            Text("${post.score} Votes"),
+                          ],),
+                            Divider(
+                            thickness: 1,
+                          ),
+                          Row(
                             children: [
-                              CircleAvatar(
-                               child: Icon(Icons.person)
-                              ),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
-                              Text(post.author.name!,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 18.0,),
-                              ),
+                              IconButton(
+      icon:  Icon(Icons.thumb_up_sharp
+      ,
+      color: post.vote != null && post.vote == 1?Colors.blue:Colors.grey,
+      ), onPressed: () {
+        if(post.vote == null)
+        {
+          context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
+        }
+        else if(post.vote == 1)
+        {
+          context.read<SingleCommunityPostBloc>().add(RemoveLikeDislikeSingleCommunityPostEvent(vote: 1));
+        }
+        else if(post.vote == -1)
+        {
+          context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
+        }
+    
+        // context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
+      }),
+                            
+                              IconButton(
+      icon:  Icon(Icons.bookmark_add_outlined,
+      color: post.is_bookmarked?Colors.blue:Colors.grey,
+      ), onPressed: () {
+        context.read<SingleCommunityPostBloc>().add(BookMarkSingleCommunityPostEvent());
+      }),
                             ],
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.02,),
-
-                               
-              Text(post.content!,
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 18.0,
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,),
-               post.image != null ?  Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: ClipRRect(
-                               borderRadius: BorderRadius.circular(16.0),
-                               child: Image.network(
-                  post.image!,
-                  fit: BoxFit.fill,
-                  width: double.infinity,
-                               ),
-                             ),
-               )
-                            : Container(
-                            ),
-                //             SizedBox(
-                // height: MediaQuery.of(context).size.height * 0.02,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start  ,
-                              children: [
-                                
-                                Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Text(dateTime[0]),
-                                ),
-                                // Text("."),
-                                Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Text(dateTime[1]),
-                                ),
-                              ],
-              
-                            ),
-                            Divider(
-                              thickness: 1,
-                            ),
-                            Row(children: [
-                              Text("${post.score} Votes"),
-                            ],),
-                              Divider(
-                              thickness: 1,
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-        icon:  Icon(Icons.thumb_up_sharp
-        ,
-        color: post.vote != null && post.vote == 1?Colors.blue:Colors.grey,
-        ), onPressed: () {
-          if(post.vote == null)
-          {
-            context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
-          }
-          else if(post.vote == 1)
-          {
-            context.read<SingleCommunityPostBloc>().add(RemoveLikeDislikeSingleCommunityPostEvent(vote: 1));
-          }
-          else if(post.vote == -1)
-          {
-            context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
-          }
-
-          // context.read<SingleCommunityPostBloc>().add(AddLikeDislikeSingleCommunityPostEvent(vote: 1));
-        }),
-                              
-                                IconButton(
-        icon:  Icon(Icons.bookmark_add_outlined,
-        color: post.is_bookmarked?Colors.blue:Colors.grey,
-        ), onPressed: () {
-          context.read<SingleCommunityPostBloc>().add(BookMarkSingleCommunityPostEvent());
-        }),
-                              ],
-                            ),
-                            Divider(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                              ],
-                              
-      ),
+                          Divider(
+                            height: MediaQuery.of(context).size.height * 0.02,
+                          ),
+                            ],
+                            
     );
   }
 }

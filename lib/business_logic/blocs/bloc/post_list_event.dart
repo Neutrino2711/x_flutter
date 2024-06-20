@@ -11,3 +11,5 @@ sealed class PostListEvent extends Equatable{
 final class GetPostListEvent extends PostListEvent{}
 
 final class GetFollowingPostListEvent extends PostListEvent{}
+
+final class GetUserPostsEvent extends PostListEvent{}
