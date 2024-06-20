@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:x/business_logic/bloc/create_post_bloc.dart';
 import 'package:x/business_logic/bloc/single_community_post_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
+import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
 import 'package:x/data/models/posts_list.dart';
+import 'package:x/presentation/screens/create_post_screen.dart';
 
 class PostCard extends StatelessWidget {
   const PostCard({
@@ -94,13 +97,35 @@ class PostTile extends StatelessWidget {
                                : Colors.grey,
                            ),
                            onPressed: () {
-                             
+                             print(posts[index]);
                            }),
                       
                        IconButton(
-                         icon: Icon(Icons.bookmark_add_outlined),
-                         onPressed: () {},
-                       )
+                         icon: Icon(Icons.chat_bubble_outline,
+                         
+                         ),
+                         onPressed: () {
+                            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+        create: (context) => UserBloc(
+            authToken: context.read<AuthCubit>().state.token!, dio: Dio())..add(GetInitialUserData()),
+      ),
+      BlocProvider(
+        create: (context) => CreatePostBloc(
+            authToken: context.read<AuthCubit>().state.token!, dio: Dio()),
+      ),
+     
+    
+                        ],
+                        child: CreatePostScreen(parentId: posts[index].parent,),
+                      )));
+                         },
+                       ),
+                      
                      ],
                    ),
                  ],

@@ -1,10 +1,11 @@
 class BasicApiConstants {
-  static const String baseUrl = 'https://5e2d-112-79-210-229.ngrok-free.app/';
+  static const String baseUrl = 'https://835a-112-79-214-183.ngrok-free.app/';
 }
 
 class PostConstants {
   static const String postlistUrl = '${BasicApiConstants.baseUrl}post/user_posts/';
   static const String bookmarklistUrl  = '${BasicApiConstants.baseUrl}post/user_bookmarks/';
+  static const String followingPostlistUrl = '${BasicApiConstants.baseUrl}post/following';
   static  String postDetail(int id) {
     return   '${BasicApiConstants.baseUrl}post/$id/';
   } 

@@ -7,6 +7,7 @@ import 'package:x/business_logic/bloc/single_community_post_bloc.dart';
 import 'package:x/business_logic/blocs/bloc/post_list_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
 import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
+import 'package:x/business_logic/trending/bloc/trending_bloc.dart';
 import 'package:x/data/models/post.dart';
 import 'package:x/presentation/screens/home_screen.dart';
 import 'package:x/presentation/screens/login_screen.dart';
@@ -31,6 +32,8 @@ class Wrapper extends StatelessWidget {
 
         PostListBloc postListBloc = PostListBloc(authToken: snapshot.data!.authToken!, dio: Dio());
 
+        TrendingBloc trendingListBloc = TrendingBloc(authToken: snapshot.data!.authToken!, dio: Dio());
+
         // SingleCommunityPostBloc singleCommunityPostBloc = SingleCommunityPostBloc(authToken: snapshot.data!.authToken!, dio: Dio());
 
 
@@ -41,6 +44,7 @@ class Wrapper extends StatelessWidget {
           providers: [
             BlocProvider.value(value: userbloc,),
             BlocProvider.value(value: postListBloc),
+            BlocProvider.value(value: trendingListBloc),
             // BlocProvider(create: ())
             
           ], 
