@@ -17,10 +17,9 @@ import 'package:x/presentation/widgets/card_post.dart';
 import 'package:x/presentation/widgets/drawer.dart';
 import 'package:x/presentation/widgets/post_list_widget.dart';
 
-// class PostScreen extends StatelessWidget {
-//   const PostScreen({super.key,});
-
 class PostScreen extends StatefulWidget {
+  
+
   const PostScreen({Key? key}) : super(key: key);
 
   @override
@@ -28,8 +27,6 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  bool isFollowing = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,92 +35,57 @@ class _PostScreenState extends State<PostScreen> {
         child: Icon(Icons.edit),
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (context) => UserBloc(
-                              authToken:
-                                  context.read<AuthCubit>().state.token!,
-                              dio: Dio(),
-                            )..add(GetInitialUserData()),
-                          ),
-                          BlocProvider(
-                            create: (context) => CreatePostBloc(
-                              authToken:
-                                  context.read<AuthCubit>().state.token!,
-                              dio: Dio(),
-                            ),
-                          ),
-                        ],
-                        child: CreatePostScreen(),
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => UserBloc(
+                      authToken: context.read<AuthCubit>().state.token!,
+                      dio: Dio(),
+                    )..add(GetInitialUserData()),
+                  ),
+                  BlocProvider(
+                    create: (context) => CreatePostBloc(
+                      authToken: context.read<AuthCubit>().state.token!,
+                      dio: Dio(),
+                    ),
+                  ),
+                ],
+                child: CreatePostScreen(),
+              ),
+            ),
+          );
         },
       ),
-      drawer:  DrawerX(),
+      drawer: DrawerX(),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'X',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.normal,
-            fontFamily: 'Pacifico',
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Pacifico',
+              ),
         ),
-        
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              context.read<PostListBloc>().add(isFollowing?GetFollowingPostListEvent(): GetPostListEvent());
+              context.read<PostListBloc>().add(GetPostListEvent());
             },
           ),
+          
         ],
-        
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                child: const Text(
-                  'All Posts',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  setState(() {
-                    isFollowing = false;
-                  });
-                  context.read<PostListBloc>().add(GetPostListEvent());
-                },
-              ),
-              TextButton(
-                child: const Text(
-                  'Following',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  setState(() {
-                    isFollowing = true;
-                  });
-                  context.read<PostListBloc>().add(GetFollowingPostListEvent());
-                },
-              ),
-            ],
+                bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Divider(
+            height: 1.0,
+            color: Colors.grey,
           ),
         ),
+
       ),
       body: SafeArea(
         child: BlocBuilder<PostListBloc, PostListState>(
@@ -132,7 +94,12 @@ class _PostScreenState extends State<PostScreen> {
               List<Postslist> posts = state.postsList;
               return PostsListWidget(posts: posts);
             } else if (state is PostListError) {
-              return Text(state.message);
+              return Text(
+                state.message,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white,
+                    ),
+              );
             } else {
               return Center(child: CircularProgressIndicator());
             }

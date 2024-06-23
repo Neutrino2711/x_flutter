@@ -21,6 +21,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final Dio dio;
 
   Future<void> _onGetInitialUserData(GetInitialUserData event,Emitter<UserState> emit) async{
+    // emit(LoadingUserState());
     try{
       final response = await dio.get(
         UserApiConstants.me,

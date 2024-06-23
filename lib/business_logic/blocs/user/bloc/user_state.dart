@@ -42,6 +42,9 @@ final class ErrorUserState extends UserState{
   const ErrorUserState(String error):super(status: UserStatus.error,error: error);
 }
 
+final class LoadingUserState extends UserState{
+  const LoadingUserState():super(status: UserStatus.loading);
+}
 //InitailizedUserState is abstract class to show user data after initialized.Subclasses of this class will have the user data
 abstract class InitializedUserState extends UserState{
   const InitializedUserState({User? user,String? error,UserStatus? status}):super(status: UserStatus.loaded,user: user);

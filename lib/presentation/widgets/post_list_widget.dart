@@ -22,7 +22,8 @@ class PostsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(
-        height: MediaQuery.of(context).size.height * 0.02,
+        height: MediaQuery.of(context).size.height * 0.01,
+        color: Colors.grey,
       ),
       shrinkWrap: true,
       itemCount: posts.length,

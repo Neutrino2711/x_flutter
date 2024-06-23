@@ -19,7 +19,8 @@ class BookmarkPostScreen extends StatelessWidget {
               if (state is PostListLoaded) {
                 List<Postslist> posts = state.postsList;
                 print(posts);
-                return PostsListWidget(posts: posts);
+                
+                return posts.isEmpty? Center(child: Text("No Posts Found")):PostsListWidget(posts: posts);
               } else if (state is PostListError) {
                 return Text(state.message);
               } else {

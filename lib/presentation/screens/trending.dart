@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:x/business_logic/blocs/cubit/auth_cubit.dart';
+import 'package:x/business_logic/blocs/user/bloc/user_bloc.dart';
+import 'package:x/business_logic/following/bloc/following_bloc.dart';
 import 'package:x/business_logic/trending/bloc/trending_bloc.dart';
 import 'package:x/business_logic/user_list/bloc/userlist_bloc.dart';
 import 'package:x/presentation/screens/search_user_page.dart';
@@ -10,6 +12,7 @@ class TrendingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<TrendingBloc>().add(FetchTrending());
+    final int UserId = context.read<UserBloc>().state.user!.id;
     return Scaffold(
       appBar: AppBar(
         title: TextButton(
@@ -25,11 +28,15 @@ class TrendingPage extends StatelessWidget {
                                 dio: Dio(),
                               ),
                             ),
-                            // BlocProvider(
-                            //   create: (context) => SubjectBloc(),
-                            // ),
+                            BlocProvider(
+                              create: (context) => FollowingBloc(
+                                authToken:  context.read<AuthCubit>().state.token!,
+                                dio: Dio(),
+                              ),
+                            ),
+                           
                           ],
-                          child: SelectOtherUser(),
+                          child: SelectOtherUser(userId: UserId),
                         )));
           },
           style: ButtonStyle(

@@ -11,8 +11,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+  
+
   final _page = PageController();
   int _index = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        // fixedColor: Colors.black,
         currentIndex: _index,
         onTap: (index) {
           _page.animateToPage(

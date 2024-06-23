@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:x/business_logic/bloc/comment_bloc.dart';
 import 'package:x/business_logic/bloc/create_post_bloc.dart';
@@ -16,10 +17,49 @@ import 'package:x/presentation/widgets/card_post.dart';
 import 'package:intl/intl.dart';
 import 'package:x/presentation/widgets/post_list_widget.dart';
 
-class SinglePostScreen extends StatelessWidget {
+class SinglePostScreen extends StatefulWidget {
   const SinglePostScreen({super.key,required this.postId});
 
   final int postId;
+
+  @override
+  State<SinglePostScreen> createState() => _SinglePostScreenState();
+}
+
+class _SinglePostScreenState extends State<SinglePostScreen> {
+
+   final ScrollController _scrollController = ScrollController();
+  bool _showBottomSheet = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      if (_showBottomSheet) {
+        setState(() {
+          _showBottomSheet = false;
+        });
+      }
+    } else if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (!_showBottomSheet) {
+        setState(() {
+          _showBottomSheet = true;
+        });
+      }
+    }
+  }
+
+    @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
 
   List<String> TimeSplit(String iso){
     DateTime dateTime = DateTime.parse(iso);
@@ -30,20 +70,18 @@ class SinglePostScreen extends StatelessWidget {
     return [formattedDate,formattedTime];
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: Container(
+      bottomSheet: _showBottomSheet? Container(
         decoration: BoxDecoration(
+          color: Colors.black,
           border: Border.all(color: Colors.grey, width: 0.5)
         ),
-        height: 50.0,width: double.infinity,
+        height: MediaQuery.of(context).size.height * 0.05,
+        width: double.infinity,
       child: Center(child: TextButton(child: Text('Post Comment',
-      style: TextStyle(
-        color: Colors.grey,
-        fontSize: 20.0,),
+      style: Theme.of(context).textTheme.bodyLarge,
       ),
       onPressed: (){
          Navigator.push(
@@ -62,62 +100,81 @@ class SinglePostScreen extends StatelessWidget {
      
     
                         ],
-                        child: CreatePostScreen(parentId: postId,),
+                        child: CreatePostScreen(parentId: widget.postId,),
                       )));
       },
       )),
-      ),
+      ):null,
                   appBar: AppBar(
                   
     title: Text('Post'),
     actions: [],
    
                   ),
-                  body: ListView(
-                    padding: EdgeInsets.all(8.0),
-                    children: [
-                     
-                                 
+                  body: NotificationListener<UserScrollNotification>(
+                     onNotification: (notification) {
+          final ScrollDirection direction = notification.direction;
+          if (direction == ScrollDirection.reverse) {
+            if (_showBottomSheet) {
+              setState(() {
+                _showBottomSheet = false;
+              });
+            }
+          } else if (direction == ScrollDirection.forward) {
+            if (!_showBottomSheet) {
+              setState(() {
+                _showBottomSheet = true;
+              });
+            }
+          }
+          return true;
+        },
+                    child: ListView(
+                      padding: EdgeInsets.all(8.0),
+                      children: [
+                       
+                                   
+                                        
                                       
-                                    
-                                    SizedBox(
-                                      height: MediaQuery.of(context).size.height * 0.02,
-                                    ),
-                    BlocBuilder<SingleCommunityPostBloc, SingleCommunityPostState>(
-                          builder: (context, state) {
-                        if (state is SingleCommunityPostLoaded) {
-                          SinglePost post = state.post;
-                          List<String> dateTime = TimeSplit(post.created_at);
-                          return PostDetailWidget(post: post, dateTime: dateTime);
-                          
-                              
-                    
-                           
-                            
-                        } else if (state is SingleCommunityPostError) {
-                          return Text(state.message);
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      }
-                      ) ,
-                        //Comment Section
-                        BlocBuilder<CommentBloc, CommentState>(
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.02,
+                                      ),
+                      BlocBuilder<SingleCommunityPostBloc, SingleCommunityPostState>(
                             builder: (context, state) {
-                          if (state is CommentLoaded) {
-                            List<Postslist> posts = state.comments;
-                            // print(posts.lesngth)s;
-                            return PostsListWidget(posts: posts);
-                          } else if (state is CommentError) {
-                            return Text("No Comments Found");
+                          if (state is SingleCommunityPostLoaded) {
+                            SinglePost post = state.post;
+                            List<String> dateTime = TimeSplit(post.created_at);
+                            return PostDetailWidget(post: post, dateTime: dateTime);
+                            
+                                
+                      
+                             
+                              
+                          } else if (state is SingleCommunityPostError) {
+                            return Text(state.message);
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
-                        }),
-                                      
-                                             
-                    ],
-                    ),);
+                        }
+                        ) ,
+                          //Comment Section
+                          BlocBuilder<CommentBloc, CommentState>(
+                              builder: (context, state) {
+                            if (state is CommentLoaded) {
+                              List<Postslist> posts = state.comments;
+                              // print(posts.lesngth)s;
+                              return PostsListWidget(posts: posts);
+                            } else if (state is CommentError) {
+                              return Text("No Comments Found");
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          }),
+                                        
+                                               
+                      ],
+                      ),
+                  ),);
   }
 }
 
