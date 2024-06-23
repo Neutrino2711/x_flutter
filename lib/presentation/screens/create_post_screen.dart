@@ -71,56 +71,58 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       body: Form(
         key: _formKey,
         child: Scaffold(
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BlocBuilder<UserBloc, UserState>(
-                builder: (context, state) {
-                  if (state is LoadedUserState) {
-                    return state.user!.profile_pic != null
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(state.user!.profile_pic!),
-                            ),
-                          )
-                        : const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircleAvatar(
-                              child: Icon(Icons.person),
-                            ),
-                          );
-                  } else if (state is ErrorUserState) {
-                    return Text(state.error!);
-                  } else {
-                    print(state);
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  controller: contentController,
-                  keyboardType: TextInputType.multiline,
-                  // autofocus: true,
-                  showCursor: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Start typing here ..',
-                    border: InputBorder.none,
-                  ),
-    
-                  maxLines: null,
-                  validator: (value) {
-                    if (value!.isEmpty && _image == null) {
-                      return 'Post cannot be empty';
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                    if (state is LoadedUserState) {
+                      return state.user!.profile_pic != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(state.user!.profile_pic!),
+                              ),
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircleAvatar(
+                                child: Icon(Icons.person),
+                              ),
+                            );
+                    } else if (state is ErrorUserState) {
+                      return Text(state.error!);
+                    } else {
+                      print(state);
+                      return CircularProgressIndicator();
                     }
-                    return null;
                   },
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: contentController,
+                    keyboardType: TextInputType.multiline,
+                    // autofocus: true,
+                    showCursor: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Start typing here ..',
+                      border: InputBorder.none,
+                    ),
+                      
+                    maxLines: null,
+                    validator: (value) {
+                      if (value!.isEmpty && _image == null) {
+                        return 'Post cannot be empty';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           bottomSheet: Container(
             width: double.infinity,

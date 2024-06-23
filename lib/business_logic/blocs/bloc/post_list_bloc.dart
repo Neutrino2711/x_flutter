@@ -38,7 +38,8 @@ class PostListBloc extends Bloc<PostListEvent, PostListState> {
       );
       // print(response);
       List<Postslist> postsList = (response.data as List).map((e) => Postslist.fromMap(e)).toList();
-      // print(postsList.last);
+      print(postsList.last);
+
       emit(PostListLoaded(postsList));
 
 

@@ -17,8 +17,8 @@ class CreatePostOnlyEvent extends CreatePostEvent {
 
   const CreatePostOnlyEvent({this.content, this.image});
 
-  @override
-  List<Object> get props => [content!, image!];
+  // @override
+  // List<Object> get props => [content!, image!];
 }
 
 class CreateCommentEvent extends CreatePostEvent {

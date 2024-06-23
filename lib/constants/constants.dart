@@ -1,5 +1,5 @@
 class BasicApiConstants {
-  static const String baseUrl = 'https://835a-112-79-214-183.ngrok-free.app/';
+  static const String baseUrl = 'https://1964-47-9-88-98.ngrok-free.app/';
 }
 
 class PostConstants {
@@ -34,6 +34,8 @@ class UserApiConstants {
   static const String create = '${UserApiConstants.baseurl}create/';
   static const String me = '${baseurl}me/';
   static const String login = '${baseurl}token/';
+  static const String following = '${baseurl}following/';
+  static const String followers = '${baseurl}followers/';
 
 }
 
