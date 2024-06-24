@@ -24,56 +24,54 @@ class Profile extends StatelessWidget {
             BlocBuilder<UserBloc, UserState>(
               builder: (context, userState) {
                 if (userState is LoadedUserState) {
-                  return Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        userState.user!.profile_pic != null
-                            ? CircleAvatar(
-                                backgroundImage: NetworkImage(userState.user!.profile_pic!),
-                                radius: 40,
-                              )
-                            : CircleAvatar(
-                                radius: 40,
-                                child: Icon(Icons.person, size: 40),
-                              ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                        Text(
-                          userState.user!.name!,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      userState.user!.profile_pic != null
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(userState.user!.profile_pic!),
+                              radius: 40,
+                            )
+                          : CircleAvatar(
+                              radius: 40,
+                              child: Icon(Icons.person, size: 40),
+                            ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Text(
+                        userState.user!.name!,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          userState.user!.email,
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                        Text(
-                          "Joined ${userState.user!.joined}",
-                          style: TextStyle(fontSize: 16,
-                          // fontStyle: FontStyle.italic,
-                          color: Colors.grey[600]
-                          ),
-                        
-                        ),
-                        // SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                        Text(
-                          "${userState.user!.followers!.length} Followers",
-                          style: TextStyle(fontSize: 16,
+                      ),
+                      Text(
+                        userState.user!.email,
+                        style: TextStyle(
                           color: Colors.grey[600],
-                          ),
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                        Text(
-                          "Posts",
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Text(
+                        "Joined ${userState.user!.joined}",
+                        style: TextStyle(fontSize: 16,
+                        // fontStyle: FontStyle.italic,
+                        color: Colors.grey[600]
                         ),
-                      ],
-                    ),
+                      
+                      ),
+                      // SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Text(
+                        "${userState.user!.followers!.length} Followers",
+                        style: TextStyle(fontSize: 16,
+                        color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Text(
+                        "Posts",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   );
                 } else if (userState is ErrorUserState) {
                   return Center(child: Text(userState.error!));

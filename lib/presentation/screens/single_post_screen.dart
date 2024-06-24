@@ -129,51 +129,56 @@ class _SinglePostScreenState extends State<SinglePostScreen> {
           }
           return true;
         },
-                    child: ListView(
-                      padding: EdgeInsets.all(8.0),
-                      children: [
-                       
-                                   
+                    child: SingleChildScrollView(
+                      child: Column(
+                        
+                        children: [
+                         
+                                     
+                                          
                                         
-                                      
-                                      SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.02,
-                                      ),
-                      BlocBuilder<SingleCommunityPostBloc, SingleCommunityPostState>(
-                            builder: (context, state) {
-                          if (state is SingleCommunityPostLoaded) {
-                            SinglePost post = state.post;
-                            List<String> dateTime = TimeSplit(post.created_at);
-                            return PostDetailWidget(post: post, dateTime: dateTime);
-                            
-                                
-                      
-                             
-                              
-                          } else if (state is SingleCommunityPostError) {
-                            return Text(state.message);
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        }
-                        ) ,
-                          //Comment Section
-                          BlocBuilder<CommentBloc, CommentState>(
+                                        SizedBox(
+                                          height: MediaQuery.of(context).size.height * 0.02,
+                                        ),
+                        BlocBuilder<SingleCommunityPostBloc, SingleCommunityPostState>(
                               builder: (context, state) {
-                            if (state is CommentLoaded) {
-                              List<Postslist> posts = state.comments;
-                              // print(posts.lesngth)s;
-                              return PostsListWidget(posts: posts);
-                            } else if (state is CommentError) {
-                              return Text("No Comments Found");
+                            if (state is SingleCommunityPostLoaded) {
+                              SinglePost post = state.post;
+                              List<String> dateTime = TimeSplit(post.created_at);
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: PostDetailWidget(post: post, dateTime: dateTime),
+                              );
+                              
+                                  
+                        
+                               
+                                
+                            } else if (state is SingleCommunityPostError) {
+                              return Text(state.message);
                             } else {
                               return Center(child: CircularProgressIndicator());
                             }
-                          }),
-                                        
-                                               
-                      ],
-                      ),
+                          }
+                          ) ,
+                            //Comment Section
+                            BlocBuilder<CommentBloc, CommentState>(
+                                builder: (context, state) {
+                              if (state is CommentLoaded) {
+                                List<Postslist> posts = state.comments;
+                                // print(posts.lesngth)s;
+                                return PostsListWidget(posts: posts, singlePost: true);
+                              } else if (state is CommentError) {
+                                return Text("No Comments Found");
+                              } else {
+                                return Center(child: CircularProgressIndicator());
+                              }
+                            }),
+                                          
+                                                 
+                        ],
+                        ),
+                    ),
                   ),);
   }
 }

@@ -21,6 +21,7 @@ class SelectOtherUser extends StatelessWidget {
       appBar: AppBar(
         title: TextField(
           // controller: _searchController,
+          
           onChanged: (value) {
             if (value.length > 2) {
               context.read<UserlistBloc>().add(SearchUserList(value));
@@ -37,7 +38,7 @@ class SelectOtherUser extends StatelessWidget {
                 EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           ),
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
           ),
         ),

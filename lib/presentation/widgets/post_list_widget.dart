@@ -14,13 +14,16 @@ class PostsListWidget extends StatelessWidget {
   const PostsListWidget({
     super.key,
     required this.posts,
+    this.singlePost
   });
 
   final List<Postslist> posts;
+  final bool? singlePost;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      physics: singlePost==true?NeverScrollableScrollPhysics():AlwaysScrollableScrollPhysics(),
       separatorBuilder: (context, index) => Divider(
         height: MediaQuery.of(context).size.height * 0.01,
         color: Colors.grey,

@@ -24,53 +24,51 @@ class DrawerX extends StatelessWidget {
         // padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
-                // color: Colors.blue,
-                ),
-            child: BlocBuilder<UserBloc, UserState>(
-              builder: (context, state) {
-                if (state is LoadedUserState) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        state.user!.profile_pic != null
-                            ? CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(state.user!.profile_pic!),
-                              )
-                            : CircleAvatar(
-                                child: Icon(Icons.person),
-                              ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01),
-                        Text(
-                          state.user!.name!,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Text(state.user!.email,
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                            )),
-                        Flexible(
-                            child: Text(
-                          state.user!.followers!.length.toString() +
-                              " Followers",
-                        ))
-                      ],
+  decoration: BoxDecoration(
+    // color: Colors.blue,
+  ),
+  child: SingleChildScrollView( // Wrap with SingleChildScrollView
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              if (state is LoadedUserState) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    state.user!.profile_pic != null
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(state.user!.profile_pic!),
+                          )
+                        : CircleAvatar(
+                            child: Icon(Icons.person),
+                          ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    Text(
+                      state.user!.name!,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  );
-                } else if (state is ErrorUserState) {
-                  return Text(state.error!);
-                } else {
-                  print(state);
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
+                    Text(state.user!.email, style: TextStyle(color: Colors.grey[600],)),
+                    Text(
+                      state.user!.followers!.length.toString() + " Followers",
+                    )
+                  ],
+                );
+              } else if (state is ErrorUserState) {
+                return Text(state.error!);
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
           ),
+        ],
+      ),
+    ),
+  ),
+),
           // Divider(
           //   height: 1,
           //   thickness: 1,

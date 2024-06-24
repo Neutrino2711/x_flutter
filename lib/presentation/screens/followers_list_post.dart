@@ -18,7 +18,7 @@ class FollowersListPosts extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: 120, // Adjust the height as needed
+            height: MediaQuery.of(context).size.height * 0.15, // Adjust the height as needed
             child: BlocBuilder<UserlistBloc, UserlistState>(
               builder: (context, state) {
                 ;
@@ -30,18 +30,22 @@ class FollowersListPosts extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           itemCount: state.users.length,
                           itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CircleAvatar(
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
                                     radius: 30,
                                     child: state.users[index].profile_pic==null?Icon(Icons.person):null,
                                     backgroundImage: state.users[index].profile_pic==null? null: NetworkImage(state.users[index].profile_pic!), // Uncomment and replace with actual image
                                   ),
-                                ),
-                                Text(state.users[index].name!),
-                              ],
+                                  Text(state.users[index].name!),
+                                  // Divider(
+                                  //   height: MediaQuery.of(context).size.height * 0.01,
+                                  //   color: Colors.grey,
+                                  // )
+                                ],
+                              ),
                             );
                           },
                         );
@@ -54,6 +58,10 @@ class FollowersListPosts extends StatelessWidget {
                 }
               },
             ),
+          ),
+          Divider(
+            height: MediaQuery.of(context).size.height * 0.01,
+            color: Colors.grey,
           ),
           Expanded(
             child: BlocBuilder<PostListBloc, PostListState>(
