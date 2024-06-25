@@ -88,22 +88,27 @@ class _PostScreenState extends State<PostScreen> {
 
       ),
       body: SafeArea(
-        child: BlocBuilder<PostListBloc, PostListState>(
-          builder: (context, state) {
-            if (state is PostListLoaded) {
-              List<Postslist> posts = state.postsList;
-              return PostsListWidget(posts: posts);
-            } else if (state is PostListError) {
-              return Text(
-                state.message,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white,
-                    ),
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
+        child: RefreshIndicator(
+          onRefresh: ()async{
+                  context.read<PostListBloc>().add(GetPostListEvent());
           },
+          child: BlocBuilder<PostListBloc, PostListState>(
+            builder: (context, state) {
+              if (state is PostListLoaded) {
+                List<Postslist> posts = state.postsList;
+                return PostsListWidget(posts: posts);
+              } else if (state is PostListError) {
+                return Text(
+                  state.message,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.white,
+                      ),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ),
     );

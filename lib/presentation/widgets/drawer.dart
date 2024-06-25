@@ -75,8 +75,19 @@ class DrawerX extends StatelessWidget {
 
           // ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
+            leading: Icon(Icons.person_outlined,
+            size: Theme.of(context).iconTheme.copyWith(
+              size: 30
+            ).size,
+            ),
+            title: Text('Profile',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              // color: Colors.red
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            
+            ),
+            ),
             onTap: () {
               Navigator.push(
                   context,
@@ -104,8 +115,19 @@ class DrawerX extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.bookmark),
-            title: Text('Bookmarks'),
+            leading: Icon(Icons.bookmark_border,
+            size: Theme.of(context).iconTheme.copyWith(
+              size: 30
+            ).size,
+            ),
+            title: Text('Bookmarks',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              // color: Colors.red
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            
+            ),
+            ),
             onTap: () {
               // Handle navigation to Settings
               Navigator.push(
@@ -122,8 +144,19 @@ class DrawerX extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.list),
-            title: Text('Followers'),
+            leading: Icon(Icons.list,
+            size: Theme.of(context).iconTheme.copyWith(
+              size: 30
+            ).size,
+            ),
+            title: Text('Followers',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              // color: Colors.red
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            
+            ),
+            ),
             onTap: () {
               // Handle navigation to Contacts
               Navigator.push(
@@ -153,8 +186,18 @@ class DrawerX extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text("Log Out"),
+            leading: Icon(Icons.logout,
+            size: Theme.of(context).iconTheme.copyWith(
+              size: 30
+            ).size,
+            ),
+            title: Text("Log Out",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              // color: Colors.red
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            
+            ),),
             onTap: () {
               context.read<AuthCubit>().logout();
             },

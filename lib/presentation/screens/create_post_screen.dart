@@ -40,14 +40,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       appBar: AppBar(
         // title: Text('Create Post'),
         leading: IconButton(
-          icon: Icon(Icons.cancel_outlined),
+          icon: Icon(Icons.close),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         actions: [
           ElevatedButton(
-            child: Text('Post'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: Text('Post',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)
+             ,),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                widget.parentId==null? context.read<CreatePostBloc>().add(CreatePostOnlyEvent(
@@ -124,13 +132,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               ],
             ),
           ),
-          bottomSheet: Container(
-            width: double.infinity,
-            child: IconButton(
+          bottomSheet:Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.attach_file, color: Colors.blue),
               onPressed: _getImage,
-              icon: Icon(Icons.attach_file),
             ),
-          ),
+            Spacer(),
+          ],
+        ),
+      ),
         ),
       ),
     );

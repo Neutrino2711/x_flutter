@@ -46,7 +46,7 @@ class TrendingPage extends StatelessWidget {
                 MediaQuery.of(context).size.height * 0.05)),
             // padding: WidgetStateProperty.all(EdgeInsets.all(10)),
           ),
-          child: Text(
+          child:const Text(
             "Search X",
             style: TextStyle(
               color: Colors.grey,
@@ -69,25 +69,29 @@ class TrendingPage extends StatelessWidget {
     if (state is TrendingLoading) {
       return Center(child: CircularProgressIndicator());
     } else if (state is TrendingLoaded) {
-      return ListView.builder(
+      return ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          height: MediaQuery.of(context).size.height * 0.001,
+          color: Colors.grey,
+        ),
         itemCount: state.trendingHashtags.length,
         itemBuilder: (context, index) {
-          return Card(
-            margin: EdgeInsets.all(8.0),
-            child: ListTile(
-              leading: Icon(Icons.trending_up, color: Colors.blue),
-              title: Text(
-                '#${state.trendingHashtags[index].name}',
-                style: TextStyle(fontWeight: FontWeight.bold),
+          return ListTile(
+            // leading: Icon(Icons.trending_up, color: Colors.blue),
+            title: Text(
+              '#${state.trendingHashtags[index].name}',
+              style: TextStyle(fontWeight: FontWeight.bold,
+              fontSize: 20.0
               ),
-              trailing: Text(
-                '${state.trendingHashtags[index].count} posts',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
-              onTap: () {
-                // Handle tap if necessary
-              },
             ),
+            trailing: Text(
+              '${state.trendingHashtags[index].count} posts',
+              style: TextStyle(color: Colors.grey[600],
+              fontSize: 20.0),
+            ),
+            onTap: () {
+              // Handle tap if necessary
+            },
           );
         },
       );

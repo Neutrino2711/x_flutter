@@ -46,98 +46,89 @@ class PostTile extends StatelessWidget {
   Widget build(BuildContext context) {
     String content = posts[index].content!;
     return GestureDetector(
-     onTap: onTap,
-     child: Padding(
-       padding: const EdgeInsets.all(8.0),
-       
-         
-           child: Column(
-             children: [
-               PostHeadBar(posts: posts, index: index),
-               Padding(
-                 padding: const EdgeInsets.only(left: 58.0),
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                    //  SizedBox(
-                    //    height: MediaQuery.of(context).size.height * 0.01,
-                    //  ),
-                     // Text(posts[index].author.name!),
-                     
-                     posts[index].content != null
-                         ? Text(
-                       content.length>100?content.substring(0,100):content,
-                             style: TextStyle(
-                               fontSize: 18.0,
-                             ),
-                           )
-                         : Container(),
-                     SizedBox(
-                       height: MediaQuery.of(context).size.height * 0.01,
-                     ),
-                     posts[index].image != null
-                         ? ClipRRect(
-                             borderRadius: BorderRadius.circular(16.0),
-                             child: Image.network(
-                               posts[index].image!,
-                               fit: BoxFit.fill,
-                               width: double.infinity,
-                             ),
-                           )
-                         : Container(),
-                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         IconButton(
-                             icon: Icon(Icons.thumb_up_sharp,
-                             color: posts[index].vote == 1
-                                 ? Colors.blue
-                                 : Colors.grey,
-                             ),
-                             onPressed: () {
-                               print(posts[index]);
-                             }),
-                        
-                         IconButton(
-                           icon: Icon(Icons.chat_bubble_outline,
-                           
-                           ),
-                           onPressed: () {
-                              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                   create: (context) => UserBloc(
-              authToken: context.read<AuthCubit>().state.token!, dio: Dio())..add(GetInitialUserData()),
-                 ),
-                 BlocProvider(
-                   create: (context) => CreatePostBloc(
-              authToken: context.read<AuthCubit>().state.token!, dio: Dio()),
-                 ),
-                
-               
-                          ],
-                          child: CreatePostScreen(parentId: posts[index].parent,),
-                        )));
-                           },
-                         ),
-                        Text(posts[index].created_at.toString().substring(11,19),
-                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,)
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PostHeadBar(posts: posts, index: index),
+            Padding(
+              padding: const EdgeInsets.only(left: 58.0, top: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (posts[index].content != null)
+                    Text(
+                      content.length > 100 ? '${content.substring(0, 100)}...' : content,
+                      style:const TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  const SizedBox(height: 8.0),
+                  if (posts[index].image != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16.0),
+                      child: Image.network(
+                        posts[index].image!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    ),
+                  const SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.thumb_up_sharp,
+                          color: posts[index].vote == 1 ? Colors.blue : Colors.grey,
                         ),
-                       ],
-                     ),
-                   ],
-                 ),
-               ),
-             ],
-           ),
-         
-       
-     ),
-            );
+                        onPressed: () {
+                          // print(posts[index]);
+                        },
+                      ),
+                      IconButton(
+                        icon:const Icon(Icons.chat_bubble_outline),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) => UserBloc(
+                                      authToken: context.read<AuthCubit>().state.token!,
+                                      dio: Dio(),
+                                    )..add(GetInitialUserData()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => CreatePostBloc(
+                                      authToken: context.read<AuthCubit>().state.token!,
+                                      dio: Dio(),
+                                    ),
+                                  ),
+                                ],
+                                child: CreatePostScreen(parentId: posts[index].parent),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Text(
+                        posts[index].created_at.toString().substring(11, 19),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey,
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -153,76 +144,48 @@ class PostHeadBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final date = DateTime.parse( posts[index].created_at);
+    final date = DateTime.parse(posts[index].created_at);
     DateTime now = DateTime.now().toUtc();
+    String timeDifference = now.difference(date).inDays > 0
+        ? '${now.difference(date).inDays}d'
+        : '${now.difference(date).inHours}h';
 
-    print(now.difference(date).inDays);
-    print(date);
-    if(posts[index].author.name==null)
-    {
-      print(posts[index]);
-    }
-    String extra =' '+ posts[index].author.email + " " + now.difference(date).inDays.toString();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Row(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            posts[index].author.profile_pic != null
-                ? CircleAvatar(
-                    radius: MediaQuery.of(context).size.width * 0.06,
-                    backgroundImage: NetworkImage(posts[index].author.profile_pic!),
-                  )
-                :  CircleAvatar(
-                    radius: MediaQuery.of(context).size.width * 0.06,
-                    child: Icon(Icons.person),
-                  ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.02,
-            ),
-            // Spacer(),
-            Text(
-              
-              posts[index].author.name!,
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 18.0,
+        posts[index].author.profile_pic != null
+            ? CircleAvatar(
+                radius: 24.0,
+                backgroundImage: NetworkImage(posts[index].author.profile_pic!),
+              )
+            :const CircleAvatar(
+                radius: 24.0,
+                child: Icon(Icons.person),
               ),
-              overflow: TextOverflow.ellipsis,
-            ),
-            Spacer(),
-            Text(
-              extra.length>16?extra.substring(0,16)+"...":extra,
-               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-        color: Colors.grey,
-      ),
-  overflow: TextOverflow.ellipsis,
-            )
-            // Spacer(),
-            //  SizedBox(
-            //   width: MediaQuery.of(context).size.width * 0.025,
-            // ),
-            
-            // Text(DateTime.now() > Duration(days: 1)?posts[index].created_at.toString().substring(0,10):posts[index].created_at.toString().substring(11,16)),
-          ],
-        ),
-        SizedBox(
-         width: MediaQuery.of(context).size.width * 0.025,
-                ),
-                Text(now.difference(date).inDays>0?now.difference(date).inDays.toString()+'d':now.difference(date).inHours.toString()+'h',
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-           color: Colors.grey,
+        const SizedBox(width: 12.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                posts[index].author.name ?? "Unknown",
+                style:const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
                 ),
                 overflow: TextOverflow.ellipsis,
-                )
+              ),
+              Text(
+                '${posts[index].author.email} • $timeDifference',
+                style:const  TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14.0,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 }
-
-// posts[index].author.profile_pic != null ? CircleAvatar(
-//                                         backgroundImage: NetworkImage(posts[index].author.profile_pic!),
-//                                       ):const CircleAvatar(
-//                                         child: Icon(Icons.person),
-//                                       ),
